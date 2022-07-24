@@ -44,7 +44,6 @@ func init() {
 func run() {
 	wf.Args() // handle any magic arguments
 	flag.Parse()
-	log.Println(wf.Config.Env.Lookup("GITHUB_PAT"))
 
 	if args := wf.Args(); len(args) > 0 {
 		query = args[0]
