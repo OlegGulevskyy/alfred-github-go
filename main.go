@@ -18,7 +18,7 @@ var (
 	searchOptions []fuzzy.Option
 
 	reposCacheName = "repos.json"
-	maxResults     = 200
+	maxResults     = 600
 	maxCacheAge    = 180 * time.Minute
 
 	query      string
