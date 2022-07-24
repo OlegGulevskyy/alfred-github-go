@@ -7,7 +7,107 @@
 	<key>category</key>
 	<string>Productivity</string>
 	<key>connections</key>
-	<dict/>
+	<dict>
+		<key>0A838C73-8416-4215-84A1-2D39D0DCFE08</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>930B467B-B15A-4F92-950E-2FCB1B44C59B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>4BD31CE0-80DF-4F91-89B4-69936F4551C0</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>D4D2C8CA-9277-41EA-A3F8-2BF8511BAA35</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>930B467B-B15A-4F92-950E-2FCB1B44C59B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>563D6A98-C6C2-4468-AD15-1E7AA7D763EC</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>7FFF337C-56F1-48BF-AEB5-0ADA4F845E33</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>38A179C2-ECF4-439C-A123-4530E1E30916</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>7FFF337C-56F1-48BF-AEB5-0ADA4F845E33</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>C377A085-A4AE-466B-BED8-5DC5E69FC19E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>B58BADA1-FB89-41F9-9428-2BB67381E401</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4BD31CE0-80DF-4F91-89B4-69936F4551C0</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>EBE7D78E-461E-4BD8-A02F-6992307D0566</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>45B6D407-239E-44DE-B0A9-93A1C9E0FDF1</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
 	<key>createdby</key>
 	<string>Oleg Gulevskyy</string>
 	<key>description</key>
@@ -18,6 +118,162 @@
 	<string>GitStuff</string>
 	<key>objects</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>After you generate your access token, run `gh-login &lt;your-token&gt;` to authenticate</string>
+				<key>title</key>
+				<string>Opening new token page...</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>45B6D407-239E-44DE-B0A9-93A1C9E0FDF1</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>gh-token</string>
+				<key>subtext</key>
+				<string>Once you have your token, run `gh-login &lt;your-token&gt;`</string>
+				<key>text</key>
+				<string>Generate a personal access token</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>EBE7D78E-461E-4BD8-A02F-6992307D0566</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Repos%20Alfred%20workflow&amp;scopes=repo</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>After you generate your access token, run `gh-login &lt;your-token&gt;` to authenticate</string>
+				<key>title</key>
+				<string>Opening new token page...</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>563D6A98-C6C2-4468-AD15-1E7AA7D763EC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>Your personal access token has been saved</string>
+				<key>title</key>
+				<string>Token saved!</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>D4D2C8CA-9277-41EA-A3F8-2BF8511BAA35</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>gh-login</string>
+				<key>subtext</key>
+				<string>Type `gh-token` to generate a new token</string>
+				<key>text</key>
+				<string>Paste your personall access token</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>B58BADA1-FB89-41F9-9428-2BB67381E401</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>on run argv
+    set bundleID to (system attribute "alfred_workflow_bundleid")
+    set token to (item 1 of argv)
+
+    tell application id "com.runningwithcrayons.Alfred"
+        set configuration "GITHUB_PAT" to value token in workflow bundleID
+    end tell
+end run</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>4BD31CE0-80DF-4F91-89B4-69936F4551C0</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -34,7 +290,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>github</string>
+				<string>repo</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -48,7 +304,11 @@
 				<key>script</key>
 				<string>query=$1
 
-./github-wf $query</string>
+if [ -z "$GITHUB_PAT" ]; then
+  echo '{"items":[{"title":"You need to log in first","subtitle":"Hit Enter to generate a new personal access token","arg":"unauthorized"}]}'
+else
+  ./github-wf $query
+fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -69,21 +329,212 @@
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>unauthorized</string>
+						<key>outputlabel</key>
+						<string>Not logged in</string>
+						<key>uid</key>
+						<string>7FFF337C-56F1-48BF-AEB5-0ADA4F845E33</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>else</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>930B467B-B15A-4F92-950E-2FCB1B44C59B</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Queries%20Alfred%20workflow&amp;scopes=repo</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>38A179C2-ECF4-439C-A123-4530E1E30916</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>C377A085-A4AE-466B-BED8-5DC5E69FC19E</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
-	<string></string>
+	<string>This workflow is shamelessly based on https://github.com/edgarjs/alfred-github-repos
+It is used as an "idea" inspiration + inspiration for the actual workflow configuration.
+However the code is implemented in a different way, different language - Go. This allows the workflow to be faster.</string>
 	<key>uidata</key>
 	<dict>
 		<key>0A838C73-8416-4215-84A1-2D39D0DCFE08</key>
 		<dict>
 			<key>xpos</key>
-			<real>235</real>
+			<real>215</real>
 			<key>ypos</key>
-			<real>245</real>
+			<real>380</real>
+		</dict>
+		<key>38A179C2-ECF4-439C-A123-4530E1E30916</key>
+		<dict>
+			<key>xpos</key>
+			<real>670</real>
+			<key>ypos</key>
+			<real>410</real>
+		</dict>
+		<key>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</key>
+		<dict>
+			<key>xpos</key>
+			<real>1335</real>
+			<key>ypos</key>
+			<real>215</real>
+		</dict>
+		<key>45B6D407-239E-44DE-B0A9-93A1C9E0FDF1</key>
+		<dict>
+			<key>xpos</key>
+			<real>1335</real>
+			<key>ypos</key>
+			<real>85</real>
+		</dict>
+		<key>4BD31CE0-80DF-4F91-89B4-69936F4551C0</key>
+		<dict>
+			<key>xpos</key>
+			<real>1145</real>
+			<key>ypos</key>
+			<real>380</real>
+		</dict>
+		<key>563D6A98-C6C2-4468-AD15-1E7AA7D763EC</key>
+		<dict>
+			<key>xpos</key>
+			<real>670</real>
+			<key>ypos</key>
+			<real>275</real>
+		</dict>
+		<key>930B467B-B15A-4F92-950E-2FCB1B44C59B</key>
+		<dict>
+			<key>xpos</key>
+			<real>470</real>
+			<key>ypos</key>
+			<real>400</real>
+		</dict>
+		<key>B58BADA1-FB89-41F9-9428-2BB67381E401</key>
+		<dict>
+			<key>xpos</key>
+			<real>955</real>
+			<key>ypos</key>
+			<real>380</real>
+		</dict>
+		<key>C377A085-A4AE-466B-BED8-5DC5E69FC19E</key>
+		<dict>
+			<key>xpos</key>
+			<real>675</real>
+			<key>ypos</key>
+			<real>540</real>
+		</dict>
+		<key>D4D2C8CA-9277-41EA-A3F8-2BF8511BAA35</key>
+		<dict>
+			<key>xpos</key>
+			<real>1335</real>
+			<key>ypos</key>
+			<real>380</real>
+		</dict>
+		<key>EBE7D78E-461E-4BD8-A02F-6992307D0566</key>
+		<dict>
+			<key>xpos</key>
+			<real>955</real>
+			<key>ypos</key>
+			<real>150</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
-	<array/>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>github.com</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Provide a github host. Example - github.com</string>
+			<key>label</key>
+			<string>Github host</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>GITHUB_HOST</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>ghp_...</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>In order for workflow to be able to retrieve information on your behalf, it will need personal access token with, at least "Repos" scope.</string>
+			<key>label</key>
+			<string>Personal access token</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>GITHUB_PAT</string>
+		</dict>
+	</array>
+	<key>version</key>
+	<string></string>
 	<key>webaddress</key>
 	<string>https://github.com/OlegGulevskyy</string>
 </dict>
