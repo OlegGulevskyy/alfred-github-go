@@ -8,14 +8,6 @@ import (
 	"github.com/google/go-github/v45/github"
 )
 
-// func main() {
-
-// 		ctx := context.Background()
-// 		client := initGhClient()
-
-// 		getAllRepos(ctx, client)
-// }
-
 func getOptions(page int) *github.RepositoryListOptions {
 	return &github.RepositoryListOptions{
 		ListOptions: github.ListOptions{PerPage: 10, Page: page},
