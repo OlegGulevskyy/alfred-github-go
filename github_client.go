@@ -8,11 +8,16 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var GITHUB_PAT = "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"
+const TOKEN_ENV_KEY = "GITHUB_PAT"
+
+func getToken() string {
+	token, _ := wf.Config.Env.Lookup(TOKEN_ENV_KEY)
+	return token
+}
 
 func initGhClient() *github.Client {
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: GITHUB_PAT},
+		&oauth2.Token{AccessToken: getToken()},
 	)
 	tc := oauth2.NewClient(context.Background(), ts)
 	tp := dbg.New(dbg.WithTransport(tc.Transport))
