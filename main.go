@@ -107,7 +107,7 @@ func run() {
 
 		wf.NewItem(*repo.FullName).
 			Subtitle(sub).
-			Arg(*repo.URL).
+			Arg(*repo.HTMLURL).
 			UID(*repo.FullName).
 			Valid(true)
 	}
