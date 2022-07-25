@@ -14,8 +14,8 @@ func runInBackground(feature string) {
 	wf.Rerun(reRunTime)
 	if !wf.IsRunning("download") {
 		cmd := exec.Command(
-			os.Args[0], 
-			"-download", 
+			os.Args[0],
+			"-download",
 			fmt.Sprintf("-feature=%v", feature),
 		)
 

@@ -85,7 +85,7 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 		log.Println(len(prs))
 	}
 
-	sessionErrors := hasSessionErrors();
+	sessionErrors := hasSessionErrors()
 	if sessionErrors {
 		return
 	}

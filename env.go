@@ -6,13 +6,13 @@ import (
 )
 
 const (
-	TOKEN_ENV_KEY = "GITHUB_PAT"
+	TOKEN_ENV_KEY          = "GITHUB_PAT"
 	GITHUB_HANDLER_ENV_KEY = "GITHUB_HANDLER"
 )
 
 type Env struct {
-	GITHUB_HOST *string
-	GITHUB_PAT *string
+	GITHUB_HOST    *string
+	GITHUB_PAT     *string
 	GITHUB_HANDLER *string
 }
 
@@ -34,12 +34,14 @@ func (e Env) getHandler() (*string, error) {
 
 func (e Env) New() Env {
 	env := Env{}
-	token, err := env.getToken(); if err != nil {
+	token, err := env.getToken()
+	if err != nil {
 		log.Fatalln(err)
 	}
 	env.GITHUB_PAT = token
 
-	handler, err := env.getHandler(); if err != nil {
+	handler, err := env.getHandler()
+	if err != nil {
 		log.Fatalln(err)
 	}
 	env.GITHUB_HANDLER = handler
