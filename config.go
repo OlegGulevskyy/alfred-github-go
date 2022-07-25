@@ -20,5 +20,6 @@ var (
 
 	query      string
 	doDownload bool
+	feature    string
 	reRunTime  = 0.3
 )
