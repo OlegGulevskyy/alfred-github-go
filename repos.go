@@ -55,29 +55,12 @@ func getAllRepos(ctx context.Context, client *github.Client) ([]*github.Reposito
 	}
 
 	wg.Wait()
-
-	for _, i := range repos {
-		log.Println(*i.FullName)
-	}
 	log.Println("Amount of repos fetched ", len(repos))
 	return repos, nil
 }
 
-func handleRepositories() {
-
+func handleRepositories(ctx context.Context, client *github.Client) {
 	if doDownload {
-		wf.Configure(aw.TextErrors(true))
-		log.Printf("Starting repositories fetch...")
-
-		ctx := context.Background()
-		client, err := initGhClient()
-		if err != nil {
-			if err.Error() == "token is not set as environment variable" {
-				wf.NewItem("Github Personal access token not found").
-					Subtitle("Please make sure you added GITHUB_PAT environment variable in Alfred workflow configuration")
-			}
-		}
-
 		repos, err := getAllRepos(ctx, client)
 		if err != nil {
 			err := wf.Session.Store(SESSION_ERROR_KEY, []byte(err.Error()))
@@ -166,8 +149,4 @@ func handleRepositories() {
 		res := wf.Filter(query)
 		log.Printf(" %d/%d Results matching query %q", len(res), len(repos), query)
 	}
-
-	wf.WarnEmpty("No repos found", "Try using different repo name")
-
-	wf.SendFeedback()
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 
 	aw "github.com/deanishe/awgo"
@@ -32,15 +33,24 @@ func run() {
 		query = args[len(args)-1]
 	}
 
-	if feature == "repositories" {
-		handleRepositories()
-		return
+	wf.Configure(aw.TextErrors(true))
+	ctx := context.Background()
+	client, err := initGhClient(); if err != nil {
+		if err.Error() == "token is not set as environment variable" {
+			wf.NewItem("Github Personal access token not found").
+				Subtitle("Please make sure you added GITHUB_PAT environment variable in Alfred workflow configuration")
+		}
 	}
 
-	if feature == "pull_requests" {
-		handlePullRequests()
-		return
+	if feature == "repositories" {
+		// repositoryFeature := Repository{}
+		handleRepositories(ctx, client)
+	} else if feature == "pull_requests" {
+		handlePullRequests(ctx, client)
 	}
+
+	wf.WarnEmpty("No repos found", "Try using different repo name")
+	wf.SendFeedback()
 }
 
 func main() {
