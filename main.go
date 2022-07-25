@@ -7,27 +7,11 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"time"
 
 	aw "github.com/deanishe/awgo"
 	"github.com/google/go-github/v45/github"
 	"go.deanishe.net/fuzzy"
 )
-
-var (
-	wf            *aw.Workflow
-	searchOptions []fuzzy.Option
-
-	reposCacheName = "repos.json"
-	maxResults     = 600
-	maxCacheAge    = 180 * time.Minute
-
-	query      string
-	doDownload bool
-	reRunTime  = 0.3
-)
-
-const SESSION_ERROR_KEY = "session_error"
 
 func init() {
 	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
