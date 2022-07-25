@@ -24,6 +24,8 @@ var (
 	doDownload bool
 	feature    string
 	reRunTime  = 0.3
+
+	env Env
 )
 
 func initFlags() {

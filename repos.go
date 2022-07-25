@@ -89,6 +89,8 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 			wf.FatalError(err)
 		}
 		sessionStatusStr := string(sessionStatus)
+		log.Println(sessionStatusStr)
+
 		if strings.Contains(sessionStatusStr, "401") {
 			wf.NewItem("Bad github token").
 				Subtitle("Please make sure you have a valid Github Personal Access Token set in Alfred workflow configuration with correct scopes (at least 'Repos')").

@@ -16,6 +16,8 @@ func init() {
 		aw.MaxResults(maxResults),
 		aw.SortOptions(searchOptions...),
 	)
+
+	env = Env{}.New()
 }
 
 func run() {
@@ -28,7 +30,7 @@ func run() {
 
 	wf.Configure(aw.TextErrors(true))
 	ctx := context.Background()
-	client, err := initGhClient()
+	client, err := initGhClient(*env.GITHUB_PAT)
 	if err != nil {
 		if err.Error() == "token is not set as environment variable" {
 			wf.NewItem("Github Personal access token not found").
