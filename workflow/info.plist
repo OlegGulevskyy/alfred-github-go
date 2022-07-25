@@ -307,7 +307,7 @@ end run</string>
 if [ -z "$GITHUB_PAT" ]; then
   echo '{"items":[{"title":"You need to log in first","subtitle":"Hit Enter to generate a new personal access token","arg":"unauthorized"}]}'
 else
-  ./github-wf $query
+  ./github-wf --feature=repositories $query
 fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
