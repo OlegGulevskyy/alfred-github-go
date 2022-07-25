@@ -85,9 +85,11 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 		log.Println(len(prs))
 	}
 
-	// if any global session errors happened
-	// such as Bad github token -> this is the moment to handle them
-	// before proceeding further
+	sessionErrors := hasSessionErrors();
+	if sessionErrors {
+		return
+	}
+
 	if wf.Session.Exists(SESSION_ERROR_KEY) {
 		sessionStatus, err := wf.Session.Load(SESSION_ERROR_KEY)
 		if err != nil {

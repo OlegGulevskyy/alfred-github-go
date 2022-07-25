@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"strings"
 	"sync"
 
 	aw "github.com/deanishe/awgo"
@@ -78,27 +77,8 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 		log.Println(len(repos))
 	}
 
-	// if any global session errors happened
-	// such as Bad github token -> this is the moment to handle them
-	// before proceeding further
-	if wf.Session.Exists(SESSION_ERROR_KEY) {
-		sessionStatus, err := wf.Session.Load(SESSION_ERROR_KEY)
-		if err != nil {
-			wf.FatalError(err)
-		}
-		sessionStatusStr := string(sessionStatus)
-		log.Println(sessionStatusStr)
-
-		if strings.Contains(sessionStatusStr, "401") {
-			wf.NewItem("Bad github token").
-				Subtitle("Please make sure you have a valid Github Personal Access Token set in Alfred workflow configuration with correct scopes (at least 'Repos')").
-				Icon(aw.IconError)
-			wf.SendFeedback()
-			return
-		}
-
-		wf.NewItem("Error").Subtitle(sessionStatusStr)
-		wf.SendFeedback()
+	sessionErrors := hasSessionErrors()
+	if sessionErrors {
 		return
 	}
 
