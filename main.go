@@ -23,6 +23,7 @@ var (
 
 	query      string
 	doDownload bool
+	reRunTime  = 0.3
 )
 
 func init() {
@@ -58,8 +59,6 @@ func run() {
 
 		repos := getAllRepos(ctx, client)
 
-		log.Println(repos)
-
 		if err := wf.Cache.StoreJSON(reposCacheName, repos); err != nil {
 			wf.FatalError(err)
 		}
@@ -78,7 +77,8 @@ func run() {
 	}
 
 	if wf.Cache.Expired(reposCacheName, maxCacheAge) {
-		wf.Rerun(1)
+		wf.Rerun(reRunTime)
+
 		if !wf.IsRunning("download") {
 			cmd := exec.Command(os.Args[0], "-download")
 
