@@ -30,3 +30,12 @@ func initFlags() {
 	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
 	flag.StringVar(&feature, "feature", "", "Defines which Github feature will be queried and handled")
 }
+
+func initSortOptions() []fuzzy.Option {
+	return []fuzzy.Option{
+		fuzzy.AdjacencyBonus(10.0),
+		fuzzy.LeadingLetterPenalty(-0.1),
+		fuzzy.MaxLeadingLetterPenalty(-3.0),
+		fuzzy.UnmatchedLetterPenalty(-0.5),
+	}
+}

@@ -20,7 +20,8 @@ func getToken() (*string, error) {
 }
 
 func initGhClient() (*github.Client, error) {
-	githubToken, err := getToken(); if err != nil {
+	githubToken, err := getToken()
+	if err != nil {
 		return nil, err
 	}
 	ts := oauth2.StaticTokenSource(

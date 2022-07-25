@@ -23,7 +23,7 @@ import (
 
 func getPullRequestSearchOptions(page int) github.SearchOptions {
 	return github.SearchOptions{
-		Sort: "updated",
+		Sort:        "updated",
 		ListOptions: github.ListOptions{PerPage: 10, Page: page},
 	}
 }

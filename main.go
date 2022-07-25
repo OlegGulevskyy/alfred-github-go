@@ -5,17 +5,12 @@ import (
 	"flag"
 
 	aw "github.com/deanishe/awgo"
-	"go.deanishe.net/fuzzy"
 )
 
 func init() {
 	initFlags()
-	searchOptions = []fuzzy.Option{
-		fuzzy.AdjacencyBonus(10.0),
-		fuzzy.LeadingLetterPenalty(-0.1),
-		fuzzy.MaxLeadingLetterPenalty(-3.0),
-		fuzzy.UnmatchedLetterPenalty(-0.5),
-	}
+	searchOptions = initSortOptions()
+
 	wf = aw.New(
 		aw.HelpURL(HELP_URL),
 		aw.MaxResults(maxResults),
@@ -33,7 +28,8 @@ func run() {
 
 	wf.Configure(aw.TextErrors(true))
 	ctx := context.Background()
-	client, err := initGhClient(); if err != nil {
+	client, err := initGhClient()
+	if err != nil {
 		if err.Error() == "token is not set as environment variable" {
 			wf.NewItem("Github Personal access token not found").
 				Subtitle("Please make sure you added GITHUB_PAT environment variable in Alfred workflow configuration")
