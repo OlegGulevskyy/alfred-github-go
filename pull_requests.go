@@ -13,14 +13,6 @@ import (
 	"github.com/google/go-github/v45/github"
 )
 
-// func main() {
-// 	ghClient, err := initGhClient(); if err != nil {
-// 		log.Fatalln(err)
-// 	}
-
-// 	getAllPullRequests(context.Background(), ghClient)
-// }
-
 func getPullRequestSearchOptions(page int) github.SearchOptions {
 	return github.SearchOptions{
 		Sort:        "updated",
