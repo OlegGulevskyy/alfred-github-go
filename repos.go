@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"os"
-	"os/exec"
 	"strings"
 	"sync"
 
@@ -114,17 +112,7 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 	}
 
 	if wf.Cache.Expired(reposCacheName, maxCacheAge) {
-		wf.Rerun(reRunTime)
-
-		if !wf.IsRunning("download") {
-			cmd := exec.Command(os.Args[0], "-download", "-feature=repositories")
-
-			if err := wf.RunInBackground("download", cmd); err != nil {
-				wf.FatalError(err)
-			}
-		} else {
-			log.Println("Download job is already running")
-		}
+		runInBackground(feature)
 
 		if len(repos) == 0 {
 			wf.NewItem("Downloading repos...").Icon(aw.IconInfo)

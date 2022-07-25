@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
-	"os/exec"
 	"strings"
 	"sync"
 
@@ -119,17 +117,7 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 	}
 
 	if wf.Cache.Expired(pullRequestsCacheName, maxCacheAge) {
-		wf.Rerun(reRunTime)
-
-		if !wf.IsRunning("download") {
-			cmd := exec.Command(os.Args[0], "-download", "-feature=pull_requests")
-
-			if err := wf.RunInBackground("download", cmd); err != nil {
-				wf.FatalError(err)
-			}
-		} else {
-			log.Println("Download job is already running")
-		}
+		runInBackground(feature)
 
 		if len(prs) == 0 {
 			wf.NewItem("Downloading pull requests...").Icon(aw.IconInfo)
