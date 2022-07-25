@@ -9,9 +9,7 @@ import (
 )
 
 func init() {
-	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
-	flag.StringVar(&feature, "feature", "", "Defines which Github feature will be queried and handled")
-
+	initFlags()
 	searchOptions = []fuzzy.Option{
 		fuzzy.AdjacencyBonus(10.0),
 		fuzzy.LeadingLetterPenalty(-0.1),
@@ -19,7 +17,7 @@ func init() {
 		fuzzy.UnmatchedLetterPenalty(-0.5),
 	}
 	wf = aw.New(
-		aw.HelpURL("https://github.com/OlegGulevskyy"),
+		aw.HelpURL(HELP_URL),
 		aw.MaxResults(maxResults),
 		aw.SortOptions(searchOptions...),
 	)

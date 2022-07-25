@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"time"
 
 	aw "github.com/deanishe/awgo"
@@ -24,3 +25,8 @@ var (
 	feature    string
 	reRunTime  = 0.3
 )
+
+func initFlags() {
+	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
+	flag.StringVar(&feature, "feature", "", "Defines which Github feature will be queried and handled")
+}
