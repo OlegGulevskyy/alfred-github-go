@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"log"
 
 	aw "github.com/deanishe/awgo"
 	"go.deanishe.net/fuzzy"
@@ -36,15 +35,16 @@ func run() {
 	if feature == "repositories" {
 		handleRepositories()
 		return
-	} else if feature == "pull_requests" {
-		log.Println("HANDLING PULL REQUESTS")
 	}
 
+	if feature == "pull_requests" {
+		handlePullRequests()
+		return
+	}
 }
 
 func main() {
 	// Wrap your entry point with Run() to catch and log panics and
 	// show an error in Alfred instead of silently dying
-	// run()
 	wf.Run(run)
 }
