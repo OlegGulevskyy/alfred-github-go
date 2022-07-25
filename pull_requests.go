@@ -62,9 +62,6 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]*github.I
 
 	wg.Wait()
 
-	for _, i := range prs {
-		log.Println(*i.Title)
-	}
 	log.Println("Amount of pull requests fetched ", len(prs))
 	return prs, nil
 }
