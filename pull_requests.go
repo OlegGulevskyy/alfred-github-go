@@ -157,13 +157,8 @@ func handlePullRequests() {
 	}
 
 	for _, pr := range prs {
-		log.Println("PR")
-		log.Println(pr)
-
 		date := pr.CreatedAt.Format("2006-1-2 15:4:5")
 		subtitle := fmt.Sprintf("On: %v | Status: %v", date, *pr.State)
-		log.Println("SUBTITLE")
-		log.Println(subtitle)
 
 		wf.NewItem(*pr.Title).
 			Subtitle(subtitle).
