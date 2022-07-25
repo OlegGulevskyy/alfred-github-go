@@ -162,7 +162,7 @@ func handleRepositories() {
 			Valid(true)
 	}
 
-	if query != "" {
+	if len(repos) != 0 {
 		res := wf.Filter(query)
 		log.Printf(" %d/%d Results matching query %q", len(res), len(repos), query)
 	}
