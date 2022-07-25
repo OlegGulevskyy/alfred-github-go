@@ -20,13 +20,20 @@ func getPullRequestSearchOptions(page int) github.SearchOptions {
 	}
 }
 
+func getQuery() *string {
+	query := ""
+	author := *env.GITHUB_HANDLER
+	query = fmt.Sprintf("is:open is:pr author:%v archived:false", author)
+	return &query
+}
+
 func getAllPullRequests(ctx context.Context, client *github.Client) ([]*github.Issue, error) {
 	prs := []*github.Issue{}
 	wg := sync.WaitGroup{}
 	opts := getPullRequestSearchOptions(1)
-	searchQuery := "is:open is:pr author:OlegGulevskyy archived:false"
+	searchQuery := getQuery()
 
-	result, response, err := client.Search.Issues(ctx, searchQuery, &opts)
+	result, response, err := client.Search.Issues(ctx, *searchQuery, &opts)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -44,7 +51,7 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]*github.I
 
 		go func(page int) {
 			options := getPullRequestSearchOptions(page)
-			prsPerPage, _, err := client.Search.Issues(ctx, searchQuery, &options)
+			prsPerPage, _, err := client.Search.Issues(ctx, *searchQuery, &options)
 			if err != nil {
 				log.Fatalln(err)
 			}
