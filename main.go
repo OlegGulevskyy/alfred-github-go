@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	aw "github.com/deanishe/awgo"
@@ -25,6 +26,8 @@ var (
 	doDownload bool
 	reRunTime  = 0.3
 )
+
+const SESSION_ERROR_KEY = "session_error"
 
 func init() {
 	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
@@ -55,9 +58,22 @@ func run() {
 		log.Printf("Starting repositories fetch...")
 
 		ctx := context.Background()
-		client := initGhClient()
+		client, err := initGhClient(); if err != nil {
+			if (err.Error() == "token is not set as environment variable") {
+				wf.NewItem("Github Personal access token not found").
+					Subtitle("Please make sure you added GITHUB_PAT environment variable in Alfred workflow configuration")
+			}
+		}
 
-		repos := getAllRepos(ctx, client)
+		repos, err := getAllRepos(ctx, client); if err != nil {
+			err := wf.Session.Store(SESSION_ERROR_KEY, []byte(err.Error()))
+			if err != nil {
+				wf.FatalError(err)
+			}
+			return
+		}
+		// reset any session errors
+		wf.Session.Store(SESSION_ERROR_KEY, nil)
 
 		if err := wf.Cache.StoreJSON(reposCacheName, repos); err != nil {
 			wf.FatalError(err)
@@ -65,6 +81,28 @@ func run() {
 
 		log.Println("Downloaded repos")
 		log.Println(len(repos))
+	}
+
+	// if any global session errors happened
+	// such as Bad github token -> this is the moment to handle them
+	// before proceeding further
+	if wf.Session.Exists(SESSION_ERROR_KEY) {
+		sessionStatus, err := wf.Session.Load(SESSION_ERROR_KEY)
+		if err != nil {
+			wf.FatalError(err)
+		}
+		sessionStatusStr := string(sessionStatus)
+		if strings.Contains(sessionStatusStr, "401") {
+			wf.NewItem("Bad github token").
+				Subtitle("Please make sure you have a valid Github Personal Access Token set in Alfred workflow configuration with correct scopes (at least 'Repos')").
+				Icon(aw.IconError)
+			wf.SendFeedback()
+			return
+		}
+
+		wf.NewItem("Error").Subtitle(sessionStatusStr)
+		wf.SendFeedback()
+		return
 	}
 
 	log.Printf("Search query = %s", query)
@@ -95,8 +133,6 @@ func run() {
 			return
 		}
 	}
-
-	log.Println("REPOS", len(repos))
 
 	for _, repo := range repos {
 		var sub string

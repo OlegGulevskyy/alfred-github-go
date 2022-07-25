@@ -14,7 +14,7 @@ func getOptions(page int) *github.RepositoryListOptions {
 	}
 }
 
-func getAllRepos(ctx context.Context, client *github.Client) []*github.Repository {
+func getAllRepos(ctx context.Context, client *github.Client) ([]*github.Repository, error) {
 	repos := []*github.Repository{}
 
 	wg := sync.WaitGroup{}
@@ -23,14 +23,15 @@ func getAllRepos(ctx context.Context, client *github.Client) []*github.Repositor
 
 	result, response, err := client.Repositories.List(ctx, "", opt)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return nil, err
 	}
 	repos = append(repos, result...)
 
 	// there is just one page of repositories
 	// no need for further fetching
 	if response.NextPage == 0 {
-		return repos
+		return repos, nil
 	}
 
 	// first page is always retrieved above, so we start iteration
@@ -44,7 +45,6 @@ func getAllRepos(ctx context.Context, client *github.Client) []*github.Repositor
 			if err != nil {
 				log.Fatalln(err)
 			}
-			// lastPage = res.LastPage
 			repos = append(repos, reposPerPage...)
 			wg.Done()
 		}(opt, p)
@@ -56,5 +56,5 @@ func getAllRepos(ctx context.Context, client *github.Client) []*github.Repositor
 		log.Println(*i.FullName)
 	}
 	log.Println("Amount of repos fetched ", len(repos))
-	return repos
+	return repos, nil
 }
