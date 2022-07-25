@@ -14,7 +14,7 @@ import (
 
 func getOptions(page int) *github.RepositoryListOptions {
 	return &github.RepositoryListOptions{
-		ListOptions: github.ListOptions{PerPage: 30, Page: page},
+		ListOptions: github.ListOptions{PerPage: fetchResultsPerPage, Page: page},
 	}
 }
 

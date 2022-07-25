@@ -20,6 +20,8 @@ var (
 	maxResults            = 600
 	maxCacheAge           = 180 * time.Minute
 
+	fetchResultsPerPage = 30
+
 	query      string
 	doDownload bool
 	feature    string

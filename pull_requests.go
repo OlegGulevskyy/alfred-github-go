@@ -16,7 +16,7 @@ import (
 func getPullRequestSearchOptions(page int) github.SearchOptions {
 	return github.SearchOptions{
 		Sort:        "updated",
-		ListOptions: github.ListOptions{PerPage: 10, Page: page},
+		ListOptions: github.ListOptions{PerPage: fetchResultsPerPage, Page: page},
 	}
 }
 
