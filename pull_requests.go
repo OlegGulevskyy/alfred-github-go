@@ -11,6 +11,15 @@ import (
 	"github.com/google/go-github/v45/github"
 )
 
+type PullRequest struct {
+	TimesVisited int
+	Data *github.Issue
+}
+
+func (p PullRequest) New(issue *github.Issue) PullRequest {
+	return PullRequest{Data: issue}
+}
+
 func getPullRequestSearchOptions(page int) github.SearchOptions {
 	return github.SearchOptions{
 		Sort:        "updated",
@@ -25,7 +34,7 @@ func getQuery() *string {
 	return &query
 }
 
-func getAllPullRequests(ctx context.Context, client *github.Client) ([]*github.Issue, error) {
+func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullRequest, error) {
 	prs := []*github.Issue{}
 	wg := sync.WaitGroup{}
 	opts := getPullRequestSearchOptions(1)
@@ -39,29 +48,35 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]*github.I
 
 	prs = append(prs, result.Issues...)
 
-	if response.NextPage == 0 {
-		return prs, nil
+	if response.NextPage != 0 {
+		for p := response.NextPage; p <= response.LastPage; p++ {
+	
+			wg.Add(1)
+	
+			go func(page int) {
+				options := getPullRequestSearchOptions(page)
+				prsPerPage, _, err := client.Search.Issues(ctx, *searchQuery, &options)
+				if err != nil {
+					log.Fatalln(err)
+				}
+				prs = append(prs, prsPerPage.Issues...)
+				wg.Done()
+			}(p)
+		}
+
+		wg.Wait()
 	}
-
-	for p := response.NextPage; p <= response.LastPage; p++ {
-
-		wg.Add(1)
-
-		go func(page int) {
-			options := getPullRequestSearchOptions(page)
-			prsPerPage, _, err := client.Search.Issues(ctx, *searchQuery, &options)
-			if err != nil {
-				log.Fatalln(err)
-			}
-			prs = append(prs, prsPerPage.Issues...)
-			wg.Done()
-		}(p)
-	}
-
-	wg.Wait()
 
 	log.Println("Amount of pull requests fetched ", len(prs))
-	return prs, nil
+
+	normalizedPullRequests := []PullRequest{}
+
+	for _, i := range prs {
+		pr := PullRequest{}.New(i)
+		normalizedPullRequests = append(normalizedPullRequests, pr)
+	}
+
+	return normalizedPullRequests, nil
 }
 
 func handlePullRequests(ctx context.Context, client *github.Client) {
@@ -110,7 +125,7 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 	}
 
 	log.Printf("Search query = %s", query)
-	prs := []*github.Issue{}
+	prs := []PullRequest{}
 
 	if wf.Cache.Exists(pullRequestsCacheName) {
 		if err := wf.Cache.LoadJSON(pullRequestsCacheName, &prs); err != nil {
@@ -129,13 +144,13 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 	}
 
 	for _, pr := range prs {
-		date := pr.CreatedAt.Format("2006-1-2 15:4:5")
-		subtitle := fmt.Sprintf("On: %v | Status: %v", date, *pr.State)
+		date := pr.Data.CreatedAt.Format("2006-1-2 15:4:5")
+		subtitle := fmt.Sprintf("On: %v | Status: %v", date, *pr.Data.State)
 
-		wf.NewItem(*pr.Title).
+		wf.NewItem(*pr.Data.Title).
 			Subtitle(subtitle).
-			Arg(*pr.HTMLURL).
-			UID(fmt.Sprintf("%v", *pr.ID)).
+			Arg(*pr.Data.HTMLURL).
+			UID(fmt.Sprintf("%v", *pr.Data.ID)).
 			Valid(true)
 	}
 
