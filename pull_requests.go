@@ -135,7 +135,7 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 		wf.NewItem(*pr.Title).
 			Subtitle(subtitle).
 			Arg(*pr.HTMLURL).
-			UID(string(*pr.ID)).
+			UID(fmt.Sprintf("%v", *pr.ID)).
 			Valid(true)
 	}
 
