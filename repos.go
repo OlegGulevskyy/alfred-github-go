@@ -9,13 +9,22 @@ import (
 	"github.com/google/go-github/v45/github"
 )
 
+type Repository struct {
+	TimesVisited int
+	Data *github.Repository
+}
+
+func (r Repository) New(repo *github.Repository) Repository {
+	return Repository{Data: repo}
+}
+
 func getOptions(page int) *github.RepositoryListOptions {
 	return &github.RepositoryListOptions{
 		ListOptions: github.ListOptions{PerPage: fetchResultsPerPage, Page: page},
 	}
 }
 
-func getAllRepos(ctx context.Context, client *github.Client) ([]*github.Repository, error) {
+func getAllRepos(ctx context.Context, client *github.Client) ([]Repository, error) {
 	repos := []*github.Repository{}
 
 	wg := sync.WaitGroup{}
@@ -31,29 +40,31 @@ func getAllRepos(ctx context.Context, client *github.Client) ([]*github.Reposito
 
 	// there is just one page of repositories
 	// no need for further fetching
-	if response.NextPage == 0 {
-		return repos, nil
+	if response.NextPage != 0 {
+		for p := response.NextPage; p <= response.LastPage; p++ {
+			wg.Add(1)
+	
+			go func(opt *github.RepositoryListOptions, page int) {
+				options := getOptions(page)
+				reposPerPage, _, err := client.Repositories.List(ctx, "", options)
+				if err != nil {
+					log.Fatalln(err)
+				}
+				repos = append(repos, reposPerPage...)
+				wg.Done()
+			}(opt, p)
+		}
+		wg.Wait()
 	}
 
-	// first page is always retrieved above, so we start iteration
-	// from 2 - which is the page number after 1 :) (c) Cap.Obvious
-	for p := response.NextPage; p <= response.LastPage; p++ {
-		wg.Add(1)
+	normalizedRepositories := []Repository{}
 
-		go func(opt *github.RepositoryListOptions, page int) {
-			options := getOptions(page)
-			reposPerPage, _, err := client.Repositories.List(ctx, "", options)
-			if err != nil {
-				log.Fatalln(err)
-			}
-			repos = append(repos, reposPerPage...)
-			wg.Done()
-		}(opt, p)
+	for _, i := range repos {
+		normalizedRepositories = append(normalizedRepositories, Repository{}.New(i))
 	}
 
-	wg.Wait()
 	log.Println("Amount of repos fetched ", len(repos))
-	return repos, nil
+	return normalizedRepositories, nil
 }
 
 func handleRepositories(ctx context.Context, client *github.Client) {
@@ -83,7 +94,7 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 	}
 
 	log.Printf("Search query = %s", query)
-	repos := []*github.Repository{}
+	repos := []Repository{}
 
 	if wf.Cache.Exists(reposCacheName) {
 		if err := wf.Cache.LoadJSON(reposCacheName, &repos); err != nil {
@@ -104,14 +115,14 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 	for _, repo := range repos {
 		var sub string
 
-		if repo.Description != nil {
-			sub = *repo.Description
+		if repo.Data.Description != nil {
+			sub = *repo.Data.Description
 		}
 
-		wf.NewItem(*repo.FullName).
+		wf.NewItem(*repo.Data.FullName).
 			Subtitle(sub).
-			Arg(*repo.HTMLURL).
-			UID(*repo.FullName).
+			Arg(*repo.Data.HTMLURL).
+			UID(*repo.Data.FullName).
 			Valid(true)
 	}
 
