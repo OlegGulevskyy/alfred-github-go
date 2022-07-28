@@ -37,7 +37,6 @@ func (r Repository) MarkVisited() {
 }
 
 func (r *Repositories) LoadCacheData() {
-	// data := []*Repository{}
 	if wf.Cache.Exists(reposCacheName) {
 		if err := wf.Cache.LoadJSON(reposCacheName, r); err != nil {
 			wf.FatalError(err)
