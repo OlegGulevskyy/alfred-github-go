@@ -25,14 +25,17 @@ var (
 	query      string
 	doDownload bool
 	feature    string
+	markVisited string
 	reRunTime  = 0.3
 
 	env Env
 )
 
 func initFlags() {
+	flag.StringVar(&query, "query", "", "Main query input")
 	flag.BoolVar(&doDownload, "download", false, "Fetch list of repositories from Github")
 	flag.StringVar(&feature, "feature", "", "Defines which Github feature will be queried and handled")
+	flag.StringVar(&markVisited, "mark_visited", "", "Mark item as visited")
 }
 
 func initSortOptions() []fuzzy.Option {
