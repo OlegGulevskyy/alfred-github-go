@@ -12,6 +12,19 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
+				<string>2A19F871-0416-4CF5-AD8E-4DF5FE04743D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>2A19F871-0416-4CF5-AD8E-4DF5FE04743D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
 				<string>930B467B-B15A-4F92-950E-2FCB1B44C59B</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -26,6 +39,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>D4D2C8CA-9277-41EA-A3F8-2BF8511BAA35</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>8B7D4BB9-9EAE-4577-919A-214BA081C7BC</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>930B467B-B15A-4F92-950E-2FCB1B44C59B</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -70,12 +96,22 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>CA4700B1-5197-4739-A53A-CC5BE531D7D6</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 		<key>A6ACE9F9-F8B3-45F4-947B-CB35E3B8B910</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>930B467B-B15A-4F92-950E-2FCB1B44C59B</string>
+				<string>8B7D4BB9-9EAE-4577-919A-214BA081C7BC</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -97,6 +133,10 @@
 				<false/>
 			</dict>
 		</array>
+		<key>C377A085-A4AE-466B-BED8-5DC5E69FC19E</key>
+		<array/>
+		<key>CA4700B1-5197-4739-A53A-CC5BE531D7D6</key>
+		<array/>
 		<key>EBE7D78E-461E-4BD8-A02F-6992307D0566</key>
 		<array>
 			<dict>
@@ -176,27 +216,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>skipqueryencode</key>
-				<false/>
-				<key>skipvarencode</key>
-				<false/>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Repos%20Alfred%20workflow&amp;scopes=repo</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
-			<key>uid</key>
-			<string>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -212,6 +231,27 @@
 			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
 			<string>563D6A98-C6C2-4468-AD15-1E7AA7D763EC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Repos%20Alfred%20workflow&amp;scopes=repo</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -248,7 +288,7 @@
 if [ -z "$GITHUB_PAT" ]; then
   echo '{"items":[{"title":"You need to log in first","subtitle":"Hit Enter to generate a new personal access token","arg":"unauthorized"}]}'
 else
-  ./github-wf --feature=repositories $query
+  ./github-wf --feature=repositories --query=$query
 fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -269,6 +309,47 @@ fi</string>
 			<string>0A838C73-8416-4215-84A1-2D39D0DCFE08</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Queries%20Alfred%20workflow&amp;scopes=repo</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>38A179C2-ECF4-439C-A123-4530E1E30916</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>feature</key>
+					<string>repositories</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>2A19F871-0416-4CF5-AD8E-4DF5FE04743D</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -386,12 +467,32 @@ end run</string>
 				<key>spaces</key>
 				<string></string>
 				<key>url</key>
-				<string>https://{var:GITHUB_HOST}/settings/tokens/new?description=Github%20Queries%20Alfred%20workflow&amp;scopes=repo</string>
+				<string>{query}</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.openurl</string>
 			<key>uid</key>
-			<string>38A179C2-ECF4-439C-A123-4530E1E30916</string>
+			<string>C377A085-A4AE-466B-BED8-5DC5E69FC19E</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>feature</key>
+					<string>pull_requests</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>8B7D4BB9-9EAE-4577-919A-214BA081C7BC</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -428,7 +529,7 @@ end run</string>
 if [ -z "$GITHUB_PAT" ]; then
   echo '{"items":[{"title":"You need to log in first","subtitle":"Hit Enter to generate a new personal access token","arg":"unauthorized"}]}'
 else
-  ./github-wf --feature=pull_requests $query
+  ./github-wf --feature=pull_requests --query=$query
 fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -453,23 +554,25 @@ fi</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>skipqueryencode</key>
+				<key>concurrently</key>
 				<false/>
-				<key>skipvarencode</key>
-				<false/>
-				<key>spaces</key>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>./github-wf --mark_visited={query} --feature=$feature</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
 				<string></string>
-				<key>url</key>
-				<string>{query}</string>
+				<key>type</key>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>C377A085-A4AE-466B-BED8-5DC5E69FC19E</string>
+			<string>CA4700B1-5197-4739-A53A-CC5BE531D7D6</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -481,16 +584,23 @@ However the code is implemented in a different way, different language - Go. Thi
 		<key>0A838C73-8416-4215-84A1-2D39D0DCFE08</key>
 		<dict>
 			<key>xpos</key>
-			<real>215</real>
+			<real>40</real>
+			<key>ypos</key>
+			<real>310</real>
+		</dict>
+		<key>2A19F871-0416-4CF5-AD8E-4DF5FE04743D</key>
+		<dict>
+			<key>xpos</key>
+			<real>225</real>
 			<key>ypos</key>
 			<real>380</real>
 		</dict>
 		<key>38A179C2-ECF4-439C-A123-4530E1E30916</key>
 		<dict>
 			<key>xpos</key>
-			<real>670</real>
+			<real>725</real>
 			<key>ypos</key>
-			<real>410</real>
+			<real>340</real>
 		</dict>
 		<key>45B39C8E-AB1B-46F0-81EF-40A05674FA7B</key>
 		<dict>
@@ -516,23 +626,30 @@ However the code is implemented in a different way, different language - Go. Thi
 		<key>563D6A98-C6C2-4468-AD15-1E7AA7D763EC</key>
 		<dict>
 			<key>xpos</key>
-			<real>670</real>
+			<real>725</real>
 			<key>ypos</key>
-			<real>275</real>
+			<real>205</real>
+		</dict>
+		<key>8B7D4BB9-9EAE-4577-919A-214BA081C7BC</key>
+		<dict>
+			<key>xpos</key>
+			<real>225</real>
+			<key>ypos</key>
+			<real>510</real>
 		</dict>
 		<key>930B467B-B15A-4F92-950E-2FCB1B44C59B</key>
 		<dict>
 			<key>xpos</key>
-			<real>470</real>
+			<real>340</real>
 			<key>ypos</key>
-			<real>400</real>
+			<real>415</real>
 		</dict>
 		<key>A6ACE9F9-F8B3-45F4-947B-CB35E3B8B910</key>
 		<dict>
 			<key>xpos</key>
-			<real>215</real>
+			<real>40</real>
 			<key>ypos</key>
-			<real>515</real>
+			<real>525</real>
 		</dict>
 		<key>B58BADA1-FB89-41F9-9428-2BB67381E401</key>
 		<dict>
@@ -544,9 +661,16 @@ However the code is implemented in a different way, different language - Go. Thi
 		<key>C377A085-A4AE-466B-BED8-5DC5E69FC19E</key>
 		<dict>
 			<key>xpos</key>
-			<real>675</real>
+			<real>570</real>
 			<key>ypos</key>
-			<real>540</real>
+			<real>480</real>
+		</dict>
+		<key>CA4700B1-5197-4739-A53A-CC5BE531D7D6</key>
+		<dict>
+			<key>xpos</key>
+			<real>570</real>
+			<key>ypos</key>
+			<real>590</real>
 		</dict>
 		<key>D4D2C8CA-9277-41EA-A3F8-2BF8511BAA35</key>
 		<dict>
