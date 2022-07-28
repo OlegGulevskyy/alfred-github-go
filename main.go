@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 
 	aw "github.com/deanishe/awgo"
 )
@@ -24,10 +25,6 @@ func run() {
 	wf.Args() // handle any magic arguments
 	flag.Parse()
 
-	if args := wf.Args(); len(args) > 1 {
-		query = args[len(args)-1]
-	}
-
 	wf.Configure(aw.TextErrors(true))
 	ctx := context.Background()
 	client, err := initGhClient(*env.GITHUB_PAT)
@@ -38,11 +35,15 @@ func run() {
 		}
 	}
 
-	if feature == "repositories" {
-		// repositoryFeature := Repository{}
+	if feature == REPOSITORIES {
 		handleRepositories(ctx, client)
-	} else if feature == "pull_requests" {
+	} else if feature == PULL_REQUESTS {
 		handlePullRequests(ctx, client)
+	}
+
+	if query == "" && markVisited != "" {
+		// TODO
+		log.Println("Marking Item as visited", markVisited)
 	}
 
 	wf.WarnEmpty("No repos found", "Try using different repo name")
