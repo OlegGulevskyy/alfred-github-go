@@ -13,32 +13,59 @@ import (
 
 type PullRequest struct {
 	TimesVisited int
-	Data *github.Issue
+
+	Id int64
+	HtmlUrl string
+	FullName string
+	Description string
+	CreatedAt string
+	State string
 }
+
+type PullRequests []PullRequest
 
 func (p PullRequest) New(issue *github.Issue) PullRequest {
-	return PullRequest{Data: issue}
+	pr := PullRequest{
+		HtmlUrl: *issue.HTMLURL,
+		FullName: *issue.Title,
+		Id: *issue.ID,
+		CreatedAt: issue.CreatedAt.Format("2006-1-2 15:4:5"),
+		State: *issue.State,
+	}
+	return pr
 }
 
-func getPullRequestSearchOptions(page int) github.SearchOptions {
+func (p PullRequest) MarkVisited() {
+	// TODO
+}
+
+func (prs *PullRequests) LoadCacheData() {
+	if wf.Cache.Exists(pullRequestsCacheName) {
+		if err := wf.Cache.LoadJSON(pullRequestsCacheName, prs); err != nil {
+			wf.FatalError(err)
+		}
+	}
+}
+
+func (PullRequests) ApiOptions(page int) github.SearchOptions {
 	return github.SearchOptions{
 		Sort:        "updated",
 		ListOptions: github.ListOptions{PerPage: fetchResultsPerPage, Page: page},
 	}
 }
 
-func getQuery() *string {
+func (PullRequests) ApiSearchQuery() *string {
 	query := ""
 	author := *env.GITHUB_HANDLER
 	query = fmt.Sprintf("is:open is:pr author:%v archived:false", author)
 	return &query
 }
 
-func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullRequest, error) {
-	prs := []*github.Issue{}
+func (prs PullRequests) ApiData(ctx context.Context, client *github.Client) ([]PullRequest, error) {
+	data := []*github.Issue{}
 	wg := sync.WaitGroup{}
-	opts := getPullRequestSearchOptions(1)
-	searchQuery := getQuery()
+	opts := prs.ApiOptions(1)
+	searchQuery := prs.ApiSearchQuery()
 
 	result, response, err := client.Search.Issues(ctx, *searchQuery, &opts)
 	if err != nil {
@@ -46,7 +73,7 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullReque
 		return nil, err
 	}
 
-	prs = append(prs, result.Issues...)
+	data = append(data, result.Issues...)
 
 	if response.NextPage != 0 {
 		for p := response.NextPage; p <= response.LastPage; p++ {
@@ -54,12 +81,12 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullReque
 			wg.Add(1)
 	
 			go func(page int) {
-				options := getPullRequestSearchOptions(page)
+				options := prs.ApiOptions(page)
 				prsPerPage, _, err := client.Search.Issues(ctx, *searchQuery, &options)
 				if err != nil {
 					log.Fatalln(err)
 				}
-				prs = append(prs, prsPerPage.Issues...)
+				data = append(data, prsPerPage.Issues...)
 				wg.Done()
 			}(p)
 		}
@@ -71,7 +98,7 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullReque
 
 	normalizedPullRequests := []PullRequest{}
 
-	for _, i := range prs {
+	for _, i := range data {
 		pr := PullRequest{}.New(i)
 		normalizedPullRequests = append(normalizedPullRequests, pr)
 	}
@@ -80,8 +107,9 @@ func getAllPullRequests(ctx context.Context, client *github.Client) ([]PullReque
 }
 
 func handlePullRequests(ctx context.Context, client *github.Client) {
+	prs := PullRequests{}
 	if doDownload {
-		prs, err := getAllPullRequests(ctx, client)
+		prs, err := prs.ApiData(ctx, client)
 		if err != nil {
 			err := wf.Session.Store(SESSION_ERROR_KEY, []byte(err.Error()))
 			if err != nil {
@@ -125,13 +153,7 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 	}
 
 	log.Printf("Search query = %s", query)
-	prs := []PullRequest{}
-
-	if wf.Cache.Exists(pullRequestsCacheName) {
-		if err := wf.Cache.LoadJSON(pullRequestsCacheName, &prs); err != nil {
-			wf.FatalError(err)
-		}
-	}
+	prs.LoadCacheData()
 
 	if wf.Cache.Expired(pullRequestsCacheName, maxCacheAge) {
 		runInBackground(feature)
@@ -144,13 +166,12 @@ func handlePullRequests(ctx context.Context, client *github.Client) {
 	}
 
 	for _, pr := range prs {
-		date := pr.Data.CreatedAt.Format("2006-1-2 15:4:5")
-		subtitle := fmt.Sprintf("On: %v | Status: %v", date, *pr.Data.State)
+		subtitle := fmt.Sprintf("On: %v | Status: %v", pr.CreatedAt, pr.State)
 
-		wf.NewItem(*pr.Data.Title).
+		wf.NewItem(pr.FullName).
 			Subtitle(subtitle).
-			Arg(*pr.Data.HTMLURL).
-			UID(fmt.Sprintf("%v", *pr.Data.ID)).
+			Arg(pr.HtmlUrl).
+			UID(fmt.Sprintf("%v", pr.Id)).
 			Valid(true)
 	}
 
