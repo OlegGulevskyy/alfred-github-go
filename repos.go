@@ -11,25 +11,52 @@ import (
 
 type Repository struct {
 	TimesVisited int
-	Data *github.Repository
+
+	// data will be taken from API
+	Id int64
+	HtmlUrl string
+	FullName string
+	Description string
 }
+
+type Repositories []Repository
 
 func (r Repository) New(repo *github.Repository) Repository {
-	return Repository{Data: repo}
+	rep := Repository{HtmlUrl: *repo.HTMLURL, FullName: *repo.FullName, Id: *repo.ID}
+	if repo.Description != nil {
+		rep.Description = *repo.Description
+	} else {
+		rep.Description = ""
+	}
+
+	return rep
 }
 
-func getOptions(page int) *github.RepositoryListOptions {
+func (r Repository) MarkVisited() {
+ // TODO maybe
+}
+
+func (r *Repositories) LoadCacheData() {
+	// data := []*Repository{}
+	if wf.Cache.Exists(reposCacheName) {
+		if err := wf.Cache.LoadJSON(reposCacheName, r); err != nil {
+			wf.FatalError(err)
+		}
+	}
+}
+
+func (Repositories) ApiOptions(page int) *github.RepositoryListOptions {
 	return &github.RepositoryListOptions{
 		ListOptions: github.ListOptions{PerPage: fetchResultsPerPage, Page: page},
 	}
 }
 
-func getAllRepos(ctx context.Context, client *github.Client) ([]Repository, error) {
+func (r Repositories) ApiData(ctx context.Context, client *github.Client) ([]Repository, error) {
 	repos := []*github.Repository{}
 
 	wg := sync.WaitGroup{}
 
-	opt := getOptions(1)
+	opt := r.ApiOptions(1)
 
 	result, response, err := client.Repositories.List(ctx, "", opt)
 	if err != nil {
@@ -45,7 +72,7 @@ func getAllRepos(ctx context.Context, client *github.Client) ([]Repository, erro
 			wg.Add(1)
 	
 			go func(opt *github.RepositoryListOptions, page int) {
-				options := getOptions(page)
+				options := r.ApiOptions(page)
 				reposPerPage, _, err := client.Repositories.List(ctx, "", options)
 				if err != nil {
 					log.Fatalln(err)
@@ -68,8 +95,10 @@ func getAllRepos(ctx context.Context, client *github.Client) ([]Repository, erro
 }
 
 func handleRepositories(ctx context.Context, client *github.Client) {
+	repositories := Repositories{}
+
 	if doDownload {
-		repos, err := getAllRepos(ctx, client)
+		reposData, err := repositories.ApiData(ctx, client)
 		if err != nil {
 			err := wf.Session.Store(SESSION_ERROR_KEY, []byte(err.Error()))
 			if err != nil {
@@ -80,12 +109,12 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 		// reset any session errors
 		wf.Session.Store(SESSION_ERROR_KEY, nil)
 
-		if err := wf.Cache.StoreJSON(reposCacheName, repos); err != nil {
+		if err := wf.Cache.StoreJSON(reposCacheName, reposData); err != nil {
 			wf.FatalError(err)
 		}
 
 		log.Println("Downloaded repos")
-		log.Println(len(repos))
+		log.Println(len(reposData))
 	}
 
 	sessionErrors := hasSessionErrors()
@@ -94,40 +123,29 @@ func handleRepositories(ctx context.Context, client *github.Client) {
 	}
 
 	log.Printf("Search query = %s", query)
-	repos := []Repository{}
 
-	if wf.Cache.Exists(reposCacheName) {
-		if err := wf.Cache.LoadJSON(reposCacheName, &repos); err != nil {
-			wf.FatalError(err)
-		}
-	}
+	repositories.LoadCacheData()
 
 	if wf.Cache.Expired(reposCacheName, maxCacheAge) {
 		runInBackground(feature)
 
-		if len(repos) == 0 {
+		if len(repositories) == 0 {
 			wf.NewItem("Downloading repos...").Icon(aw.IconInfo)
 			wf.SendFeedback()
 			return
 		}
 	}
 
-	for _, repo := range repos {
-		var sub string
-
-		if repo.Data.Description != nil {
-			sub = *repo.Data.Description
-		}
-
-		wf.NewItem(*repo.Data.FullName).
-			Subtitle(sub).
-			Arg(*repo.Data.HTMLURL).
-			UID(*repo.Data.FullName).
+	for _, repo := range repositories {
+		wf.NewItem(repo.FullName).
+			Subtitle(repo.Description).
+			Arg(repo.HtmlUrl).
+			UID(repo.FullName).
 			Valid(true)
 	}
 
-	if len(repos) != 0 {
+	if len(repositories) != 0 {
 		res := wf.Filter(query)
-		log.Printf(" %d/%d Results matching query %q", len(res), len(repos), query)
+		log.Printf(" %d/%d Results matching query %q", len(res), len(repositories), query)
 	}
 }
