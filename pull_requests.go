@@ -35,10 +35,6 @@ func (p PullRequest) New(issue *github.Issue) PullRequest {
 	return pr
 }
 
-func (p PullRequest) MarkVisited() {
-	// TODO
-}
-
 func (prs *PullRequests) LoadCacheData() {
 	if wf.Cache.Exists(pullRequestsCacheName) {
 		if err := wf.Cache.LoadJSON(pullRequestsCacheName, prs); err != nil {

@@ -32,9 +32,6 @@ func (r Repository) New(repo *github.Repository) Repository {
 	return rep
 }
 
-func (r Repository) MarkVisited() {
- // TODO maybe
-}
 
 func (r *Repositories) LoadCacheData() {
 	if wf.Cache.Exists(reposCacheName) {
