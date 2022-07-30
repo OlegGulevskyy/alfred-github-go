@@ -22,6 +22,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	github.com/jason0x43/go-alfred v0.0.0-20211113201834-ddd6850b79bb // indirect
 	github.com/magefile/mage v1.13.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	go.deanishe.net/env v0.5.1 // indirect
 	go.deanishe.net/fuzzy v1.0.0 // indirect
 	go.opencensus.io v0.23.0 // indirect

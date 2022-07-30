@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
+
+	flag "github.com/spf13/pflag"
 
 	aw "github.com/deanishe/awgo"
 )

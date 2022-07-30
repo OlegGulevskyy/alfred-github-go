@@ -1,15 +1,13 @@
 package main
 
 import (
-	"flag"
 	"time"
+
+	flag "github.com/spf13/pflag"
 
 	aw "github.com/deanishe/awgo"
 	"go.deanishe.net/fuzzy"
 )
-
-// FIXME
-// refactor to use a struct if it's better than just global variables
 
 var (
 	wf            *aw.Workflow
